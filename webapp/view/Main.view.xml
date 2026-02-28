@@ -1,0 +1,45 @@
+<mvc:View controllerName="project2.controller.Main"
+     xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form">
+
+    <Page title="Orders Overview">
+
+        <content>
+
+            <Table
+                growing="true"
+                items="{
+                    path: '/Orders'
+                }">
+
+                <columns>
+                    <Column>
+                        <Text text="Order ID"/>
+                    </Column>
+                    <Column>
+                        <Text text="Customer ID"/>
+                    </Column>
+                    <Column>
+                        <Text text="Ship Country"/>
+                    </Column>
+                </columns>
+
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{OrderID}"/>
+                            <Text text="{CustomerID}"/>
+                            <Text text="{ShipCountry}"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+
+            </Table>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

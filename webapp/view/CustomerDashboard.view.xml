@@ -1,0 +1,100 @@
+<mvc:View controllerName="project2.controller.CustomerDashboard"
+xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:viz="sap.viz.ui5.controls"
+  xmlns:viz.data="sap.viz.ui5.data"
+  xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+  xmlns:mc="sap.suite.ui.microchart">
+
+  <Page title="Customer 360° Dashboard"
+        showNavButton="true"
+        navButtonPress="onNavBack">
+
+    <content>
+
+      <!-- ================= OBJECT HEADER ================= -->
+      <ObjectHeader
+        title="{CompanyName}"
+        number="{CustomerID}"
+        intro="{City}, {Country}">
+      </ObjectHeader>
+
+      <!-- ================= KPI CARDS ================= -->
+      <HBox justifyContent="SpaceAround" class="sapUiSmallMarginTop">
+
+        <VBox alignItems="Center">
+          <Title text="Total Orders"/>
+          <ObjectNumber number="{dashboard>/totalOrders}"/>
+        </VBox>
+
+        <VBox alignItems="Center">
+          <Title text="Total Freight"/>
+          <ObjectNumber number="{dashboard>/totalFreight}"
+                        unit="USD"/>
+        </VBox>
+
+        <VBox alignItems="Center">
+          <Title text="Avg Freight"/>
+          <ObjectNumber number="{dashboard>/avgFreight}"
+                        unit="USD"/>
+        </VBox>
+
+      </HBox>
+
+      <!-- ================= MICROCHART ================= -->
+      <VBox class="sapUiMediumMarginTop">
+        <Title text="Freight Distribution"/>
+        <mc:HarveyBallMicroChart
+          total="100"
+          items="{
+            path: 'dashboard>/freightDistribution'
+          }">
+          <mc:HarveyBallMicroChartItem
+            fraction="{dashboard>value}"
+            color="Good"/>
+        </mc:HarveyBallMicroChart>
+      </VBox>
+
+      <!-- ================= BAR CHART ================= -->
+      <VBox class="sapUiMediumMarginTop">
+
+        <Title text="Orders by Year"/>
+
+        <viz:VizFrame
+          id="idVizFrame"
+          vizType="column"
+          width="100%"
+          height="400px">
+
+          <viz:dataset>
+            <viz.data:FlattenedDataset data="{dashboard>/yearData}">
+              <viz.data:dimensions>
+                <viz.data:DimensionDefinition
+                  name="Year"
+                  value="{dashboard>year}"/>
+              </viz.data:dimensions>
+
+              <viz.data:measures>
+                <viz.data:MeasureDefinition
+                  name="Orders"
+                  value="{dashboard>count}"/>
+              </viz.data:measures>
+            </viz.data:FlattenedDataset>
+          </viz:dataset>
+
+          <viz:feeds>
+            <viz.feeds:FeedItem uid="valueAxis"
+                                type="Measure"
+                                values="Orders"/>
+            <viz.feeds:FeedItem uid="categoryAxis"
+                                type="Dimension"
+                                values="Year"/>
+          </viz:feeds>
+
+        </viz:VizFrame>
+
+      </VBox>
+
+    </content>
+  </Page>
+</mvc:View>

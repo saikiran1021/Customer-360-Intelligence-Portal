@@ -1,0 +1,58 @@
+<mvc:View controllerName="project2.controller.OrderDetails"
+xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form">
+
+    <Page
+        id="orderDetailsPage"
+        title="Order Details"
+        showNavButton="true"
+        navButtonPress="onNavBack">
+
+        <content>
+
+            <!-- Object Header -->
+            <ObjectHeader
+                id="orderObjectHeader"
+                title="Order #{OrderID}"
+                number="{Freight}"
+                numberUnit="Freight USD"
+                intro="{ShipName}" />
+
+            <!-- SimpleForm (Correct Namespace) -->
+            <form:SimpleForm
+                id="orderDetailsForm"
+                editable="false"
+                layout="ResponsiveGridLayout"
+                class="sapUiMediumMargin">
+
+                <Label text="Customer ID"/>
+                <Text text="{CustomerID}"/>
+
+                <Label text="Order Date"/>
+                <Text
+                    text="{
+                        path: 'OrderDate',
+                        type: 'sap.ui.model.type.Date',
+                        formatOptions: {
+                            pattern: 'dd-MM-yyyy',
+                            UTC: true
+                        }
+                    }"/>
+
+                <Label text="Ship Address"/>
+                <Text text="{ShipAddress}"/>
+
+                <Label text="City"/>
+                <Text text="{ShipCity}"/>
+
+                <Label text="Country"/>
+                <Text text="{ShipCountry}"/>
+
+            </form:SimpleForm>
+
+        </content>
+
+    </Page>
+
+</mvc:View>
