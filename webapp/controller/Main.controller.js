@@ -1,103 +1,75 @@
 sap.ui.define([
-  "sap/ui/core/mvc/Controller",
-  "sap/ui/model/Filter",
-  "sap/ui/model/FilterOperator",
-  "sap/ui/model/Sorter"
+    "sap/ui/core/mvc/Controller",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
+    "sap/ui/model/Sorter"
 ], function (Controller, Filter, FilterOperator, Sorter) {
-  "use strict";
+    "use strict";
 
-  return Controller.extend("project2.controller.Main"), {
+    return Controller.extend("project2.controller.Main", {
 
-    onInit: function () {
-      this._aFilters = [];
-      this._sSearchQuery = "";
-      this._sCountry = "";
-      this._sSortKey = "desc";
+        onInit: function () {
+            this._sSearchQuery = "";
+            this._sCountry = "";
+            this._sSortKey = "desc";
+        },
 
-      this._applySorting();
-    },
+        onCountryChange: function (oEvent) {
+            this._sCountry = oEvent.getSource().getSelectedKey();
+            this._applyFilters();
+        },
 
-    /* ================= COUNTRY FILTER ================= */
-    onCountryChange: function (oEvent) {
-      this._sCountry = oEvent.getSource().getSelectedKey();
-      this._applyFilters();
-    },
+        onSortChange: function (oEvent) {
+            this._sSortKey = oEvent.getSource().getSelectedKey();
+            this._applySorting();
+        },
 
-    /* ================= SORT ================= */
-    onSortChange: function (oEvent) {
-      this._sSortKey = oEvent.getSource().getSelectedKey();
-      this._applySorting();
-    },
+        _applySorting: function () {
+            var oBinding = this.byId("ordersTable").getBinding("items");
+            if (oBinding) {
+                var bDescending = this._sSortKey === "desc";
+                oBinding.sort(new Sorter("OrderDate", bDescending));
+            }
+        },
 
-    _applySorting: function () {
-      var oTable = this.byId("ordersTable");
-      var oBinding = oTable.getBinding("items");
+        onSearchLiveChange: function (oEvent) {
+            this._sSearchQuery = oEvent.getParameter("newValue");
+            this._applyFilters();
+        },
 
-      if (!oBinding) return;
+        _applyFilters: function () {
+            var aFilters = [];
+            if (this._sCountry) {
+                aFilters.push(new Filter("ShipCountry", FilterOperator.EQ, this._sCountry));
+            }
 
-      var bDescending = this._sSortKey === "desc";
+            if (this._sSearchQuery) {
+                aFilters.push(new Filter({
+                    filters: [
+                        new Filter("OrderID", FilterOperator.Contains, this._sSearchQuery),
+                        new Filter("CustomerID", FilterOperator.Contains, this._sSearchQuery),
+                        new Filter("ShipCountry", FilterOperator.Contains, this._sSearchQuery)
+                    ],
+                    and: false
+                }));
+            }
 
-      var oSorter = new Sorter("OrderDate", bDescending);
-      oBinding.sort(oSorter);
-    },
+            var oBinding = this.byId("ordersTable").getBinding("items");
+            if (oBinding) {
+                oBinding.filter(aFilters);
+            }
+        },
 
-    /* ================= SEARCH ================= */
-    onSearchLiveChange: function (oEvent) {
-      this._sSearchQuery = oEvent.getParameter("newValue");
-      this._applyFilters();
-    },
+        onOrderLinkPress: function (oEvent) {
+            this.getOwnerComponent().getRouter().navTo("orderDetails", {
+                orderId: oEvent.getSource().getText()
+            });
+        },
 
-    /* ================= APPLY FILTERS ================= */
-    _applyFilters: function () {
-
-      var aFilters = [];
-
-      // Country Filter
-      if (this._sCountry) {
-        aFilters.push(
-          new Filter("ShipCountry", FilterOperator.EQ, this._sCountry)
-        );
-      }
-
-      // Search Filter
-      if (this._sSearchQuery) {
-
-        var oSearchFilter = new Filter({
-          filters: [
-            new Filter("OrderID", FilterOperator.Contains, this._sSearchQuery),
-            new Filter("CustomerID", FilterOperator.Contains, this._sSearchQuery),
-            new Filter("ShipCountry", FilterOperator.Contains, this._sSearchQuery)
-          ],
-          and: false
-        });
-
-        aFilters.push(oSearchFilter);
-      }
-
-      var oTable = this.byId("ordersTable");
-      var oBinding = oTable.getBinding("items");
-
-      if (oBinding) {
-        oBinding.filter(aFilters);
-      }
-    },
-
-    /* ================= NAVIGATION ================= */
-
-    onOrderLinkPress: function (oEvent) {
-      var sOrderId = oEvent.getSource().getText();
-
-      this.getOwnerComponent().getRouter().navTo("order", {
-        orderId: sOrderId
-      });
-    },
-
-    onCustomerLinkPress: function (oEvent) {
-      var sCustomerId = oEvent.getSource().getText();
-
-      this.getOwnerComponent().getRouter().navTo("customerDashboard", {
-        customerId: sCustomerId
-      });
-    }
-
-  })
+        onCustomerLinkPress: function (oEvent) {
+            this.getOwnerComponent().getRouter().navTo("customerDashboard", {
+                customerId: oEvent.getSource().getText()
+            });
+        }
+    }); // Parenthesis and brace correctly closed here
+});
