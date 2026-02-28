@@ -6,16 +6,12 @@ sap.ui.define([
 ], function (Controller, Filter, FilterOperator, Sorter) {
     "use strict";
 
-    return Controller.extend("project2.controller.Main", { // Fixed: Parenthesis remains open here
+    return Controller.extend("project2.controller.Main", {
 
         onInit: function () {
             this._sSearchQuery = "";
             this._sCountry = "";
             this._sSortKey = "desc";
-            
-            // Attach listener to update S.No after data is loaded
-            var oTable = this.byId("ordersTable");
-            oTable.getBinding("items").attachDataReceived(this._updateSNo, this);
         },
 
         onCountryChange: function (oEvent) {
@@ -61,7 +57,6 @@ sap.ui.define([
             var oBinding = this.byId("ordersTable").getBinding("items");
             if (oBinding) {
                 oBinding.filter(aFilters);
-                this._updateSNo(); // Refresh S.No after filter
             }
         },
 
@@ -75,16 +70,6 @@ sap.ui.define([
             this.getOwnerComponent().getRouter().navTo("customerDashboard", {
                 customerId: oEvent.getSource().getText()
             });
-        },
-
-        _updateSNo: function () {
-            var aItems = this.byId("ordersTable").getItems();
-            aItems.forEach(function (oItem, i) {
-                var oCells = oItem.getCells();
-                if (oCells[0]) {
-                    oCells[0].setText(i + 1);
-                }
-            });
         }
-    }); // Fixed: Parenthesis correctly closes the extend function here
+    }); // Parenthesis and brace correctly closed here
 });

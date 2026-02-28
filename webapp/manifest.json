@@ -9,17 +9,7 @@
     },
     "dataSources": {
       "mainService": {
-        "uri": "/Orders",
-        "type": "OData",
-        "settings": {
-          "odataVersion": "2.0",
-          "localUri": "localService/metadata.xml"
-        }
-      }
-    },
-    "dataSources": {
-      "mainService": {
-        "uri": "/Customers",
+        "uri": "https://services.odata.org/V2/Northwind/Northwind.svc/",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0",
@@ -90,9 +80,18 @@
         }
       ],
       "targets": {
-        "TargetMain": { "viewName": "Main", "viewLevel": 1 },
-        "TargetOrderDetails": { "viewName": "OrderDetails", "viewLevel": 2 },
-        "TargetCustomerDashboard": { "viewName": "CustomerDashboard", "viewLevel": 2 }
+        "TargetMain": {
+          "viewName": "Main",
+          "viewLevel": 1
+        },
+        "TargetOrderDetails": {
+          "viewName": "OrderDetails",
+          "viewLevel": 2
+        },
+        "TargetCustomerDashboard": {
+          "viewName": "CustomerDashboard",
+          "viewLevel": 2
+        }
       }
     },
     "rootView": {
