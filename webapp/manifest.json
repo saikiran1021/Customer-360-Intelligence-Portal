@@ -7,8 +7,6 @@
     "applicationVersion": {
       "version": "0.0.1"
     },
-    "title": "Enterprise Customer 360 Portal",
-    "description": "SAPUI5 Freestyle Portal",
     "dataSources": {
       "mainService": {
         "uri": "/Orders",
@@ -92,18 +90,9 @@
         }
       ],
       "targets": {
-        "TargetMain": {
-          "viewName": "Main",
-          "viewLevel": 1
-        },
-        "TargetOrderDetails": {
-          "viewName": "OrderDetails",
-          "viewLevel": 2
-        },
-        "TargetCustomerDashboard": {
-          "viewName": "CustomerDashboard",
-          "viewLevel": 2
-        }
+        "TargetMain": { "viewName": "Main", "viewLevel": 1 },
+        "TargetOrderDetails": { "viewName": "OrderDetails", "viewLevel": 2 },
+        "TargetCustomerDashboard": { "viewName": "CustomerDashboard", "viewLevel": 2 }
       }
     },
     "rootView": {
